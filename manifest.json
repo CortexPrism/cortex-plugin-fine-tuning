@@ -1,0 +1,199 @@
+{
+  "name": "cortex-plugin-fine-tuning",
+  "version": "1.0.0",
+  "description": "Model Fine-Tuning Orchestrator — manage the full fine-tuning lifecycle across OpenAI, Together AI, and Replicate: dataset preparation, training job submission, evaluation, and deployment.",
+  "kind": "esm",
+  "entryPoint": "mod.ts",
+  "runtime": "deno",
+  "author": "CortexPrism",
+  "license": "MIT",
+  "repository": "https://github.com/CortexPrism/cortex-plugin-fine-tuning",
+  "homepage": "https://cortexprism.io/marketplace/plugins/fine-tuning",
+  "capabilities": ["tools", "network:fetch"],
+  "tools": [
+    {
+      "name": "finetune_prepare_dataset",
+      "description": "Prepare and validate a dataset for fine-tuning: format conversion, cleaning, splitting into train/validation/test sets",
+      "params": [
+        {
+          "name": "source",
+          "type": "string",
+          "description": "Path to dataset file (JSONL, CSV, Parquet) or URL",
+          "required": true
+        },
+        {
+          "name": "format",
+          "type": "string",
+          "description": "Target format for the provider",
+          "required": true,
+          "enum": ["openai_chat", "openai_completion", "together_chat", "replicate"]
+        },
+        {
+          "name": "validation_split",
+          "type": "number",
+          "description": "Validation split ratio (default: 0.1)",
+          "required": false
+        },
+        {
+          "name": "max_examples",
+          "type": "number",
+          "description": "Maximum examples to include",
+          "required": false
+        }
+      ]
+    },
+    {
+      "name": "finetune_start_job",
+      "description": "Start a fine-tuning job on the specified provider with the prepared dataset",
+      "params": [
+        {
+          "name": "provider",
+          "type": "string",
+          "description": "Fine-tuning provider",
+          "required": true,
+          "enum": ["openai", "together", "replicate"]
+        },
+        {
+          "name": "dataset_id",
+          "type": "string",
+          "description": "Prepared dataset ID (from prepare_dataset)",
+          "required": true
+        },
+        {
+          "name": "base_model",
+          "type": "string",
+          "description": "Base model to fine-tune (e.g. gpt-4o-mini, llama-3-8b)",
+          "required": true
+        },
+        {
+          "name": "suffix",
+          "type": "string",
+          "description": "Suffix for the fine-tuned model name",
+          "required": false
+        },
+        {
+          "name": "hyperparameters",
+          "type": "string",
+          "description": "JSON string of hyperparameters (epochs, lr, batch_size)",
+          "required": false
+        }
+      ]
+    },
+    {
+      "name": "finetune_get_status",
+      "description": "Get the status of a fine-tuning job including progress, metrics, and estimated completion",
+      "params": [
+        {
+          "name": "provider",
+          "type": "string",
+          "description": "Fine-tuning provider",
+          "required": true,
+          "enum": ["openai", "together", "replicate"]
+        },
+        { "name": "job_id", "type": "string", "description": "Job ID to check", "required": true }
+      ]
+    },
+    {
+      "name": "finetune_evaluate",
+      "description": "Evaluate a fine-tuned model against the base model using a test set. Compares accuracy, latency, and cost.",
+      "params": [
+        {
+          "name": "provider",
+          "type": "string",
+          "description": "Fine-tuning provider",
+          "required": true,
+          "enum": ["openai", "together", "replicate"]
+        },
+        {
+          "name": "finetuned_model",
+          "type": "string",
+          "description": "Fine-tuned model ID",
+          "required": true
+        },
+        {
+          "name": "base_model",
+          "type": "string",
+          "description": "Base model ID for comparison",
+          "required": true
+        },
+        {
+          "name": "test_dataset_id",
+          "type": "string",
+          "description": "Test dataset ID",
+          "required": true
+        },
+        {
+          "name": "metrics",
+          "type": "string",
+          "description": "Comma-separated metrics to compute",
+          "required": false
+        }
+      ]
+    },
+    {
+      "name": "finetune_list_jobs",
+      "description": "List all fine-tuning jobs across providers with status, cost, and model details",
+      "params": [
+        {
+          "name": "provider",
+          "type": "string",
+          "description": "Filter by provider (omit for all)",
+          "required": false,
+          "enum": ["openai", "together", "replicate", "all"]
+        },
+        {
+          "name": "status",
+          "type": "string",
+          "description": "Filter by status",
+          "required": false,
+          "enum": ["running", "succeeded", "failed", "cancelled", "all"]
+        }
+      ]
+    }
+  ],
+  "dependencies": {},
+  "peerDependencies": { "cortex": ">=1.0.0" },
+  "ui": {
+    "settings": [
+      {
+        "section": "OpenAI",
+        "fields": [
+          { "key": "openaiApiKey", "label": "API Key", "type": "secret", "defaultValue": "" }
+        ]
+      },
+      {
+        "section": "Together AI",
+        "fields": [
+          { "key": "togetherApiKey", "label": "API Key", "type": "secret", "defaultValue": "" }
+        ]
+      },
+      {
+        "section": "Replicate",
+        "fields": [
+          { "key": "replicateApiToken", "label": "API Token", "type": "secret", "defaultValue": "" }
+        ]
+      },
+      {
+        "section": "Defaults",
+        "fields": [
+          {
+            "key": "defaultEpochs",
+            "label": "Default Epochs",
+            "type": "number",
+            "defaultValue": 3
+          },
+          {
+            "key": "costAlertThreshold",
+            "label": "Cost Alert Threshold (USD)",
+            "type": "number",
+            "defaultValue": 50
+          }
+        ]
+      }
+    ]
+  },
+  "aiDisclosure": {
+    "tools": ["Kilo (DeepSeek) — scaffold and implementation"],
+    "humanReview": true
+  }
+}
