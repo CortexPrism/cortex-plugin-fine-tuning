@@ -1,7 +1,7 @@
 {
   "name": "cortex-plugin-fine-tuning",
-  "version": "1.0.0",
-  "description": "Model Fine-Tuning Orchestrator — manage the full fine-tuning lifecycle across OpenAI, Together AI, and Replicate: dataset preparation, training job submission, evaluation, and deployment.",
+  "version": "1.0.1",
+  "description": "Model Fine-Tuning Orchestrator \u2014 manage the full fine-tuning lifecycle across OpenAI, Together AI, and Replicate: dataset preparation, training job submission, evaluation, and deployment.",
   "kind": "esm",
   "entryPoint": "mod.ts",
   "runtime": "deno",
@@ -9,7 +9,10 @@
   "license": "MIT",
   "repository": "https://github.com/CortexPrism/cortex-plugin-fine-tuning",
   "homepage": "https://cortexprism.io/marketplace/plugins/fine-tuning",
-  "capabilities": ["tools", "network:fetch"],
+  "capabilities": [
+    "tools",
+    "network:fetch"
+  ],
   "tools": [
     {
       "name": "finetune_prepare_dataset",
@@ -26,7 +29,12 @@
           "type": "string",
           "description": "Target format for the provider",
           "required": true,
-          "enum": ["openai_chat", "openai_completion", "together_chat", "replicate"]
+          "enum": [
+            "openai_chat",
+            "openai_completion",
+            "together_chat",
+            "replicate"
+          ]
         },
         {
           "name": "validation_split",
@@ -51,7 +59,11 @@
           "type": "string",
           "description": "Fine-tuning provider",
           "required": true,
-          "enum": ["openai", "together", "replicate"]
+          "enum": [
+            "openai",
+            "together",
+            "replicate"
+          ]
         },
         {
           "name": "dataset_id",
@@ -88,9 +100,18 @@
           "type": "string",
           "description": "Fine-tuning provider",
           "required": true,
-          "enum": ["openai", "together", "replicate"]
+          "enum": [
+            "openai",
+            "together",
+            "replicate"
+          ]
         },
-        { "name": "job_id", "type": "string", "description": "Job ID to check", "required": true }
+        {
+          "name": "job_id",
+          "type": "string",
+          "description": "Job ID to check",
+          "required": true
+        }
       ]
     },
     {
@@ -102,7 +123,11 @@
           "type": "string",
           "description": "Fine-tuning provider",
           "required": true,
-          "enum": ["openai", "together", "replicate"]
+          "enum": [
+            "openai",
+            "together",
+            "replicate"
+          ]
         },
         {
           "name": "finetuned_model",
@@ -139,38 +164,66 @@
           "type": "string",
           "description": "Filter by provider (omit for all)",
           "required": false,
-          "enum": ["openai", "together", "replicate", "all"]
+          "enum": [
+            "openai",
+            "together",
+            "replicate",
+            "all"
+          ]
         },
         {
           "name": "status",
           "type": "string",
           "description": "Filter by status",
           "required": false,
-          "enum": ["running", "succeeded", "failed", "cancelled", "all"]
+          "enum": [
+            "running",
+            "succeeded",
+            "failed",
+            "cancelled",
+            "all"
+          ]
         }
       ]
     }
   ],
   "dependencies": {},
-  "peerDependencies": { "cortex": ">=1.0.0" },
+  "peerDependencies": {
+    "cortex": ">=0.51.0"
+  },
   "ui": {
     "settings": [
       {
         "section": "OpenAI",
         "fields": [
-          { "key": "openaiApiKey", "label": "API Key", "type": "secret", "defaultValue": "" }
+          {
+            "key": "openaiApiKey",
+            "label": "API Key",
+            "type": "secret",
+            "defaultValue": ""
+          }
         ]
       },
       {
         "section": "Together AI",
         "fields": [
-          { "key": "togetherApiKey", "label": "API Key", "type": "secret", "defaultValue": "" }
+          {
+            "key": "togetherApiKey",
+            "label": "API Key",
+            "type": "secret",
+            "defaultValue": ""
+          }
         ]
       },
       {
         "section": "Replicate",
         "fields": [
-          { "key": "replicateApiToken", "label": "API Token", "type": "secret", "defaultValue": "" }
+          {
+            "key": "replicateApiToken",
+            "label": "API Token",
+            "type": "secret",
+            "defaultValue": ""
+          }
         ]
       },
       {
@@ -193,7 +246,9 @@
     ]
   },
   "aiDisclosure": {
-    "tools": ["Kilo (DeepSeek) — scaffold and implementation"],
+    "tools": [
+      "Kilo (DeepSeek) \u2014 scaffold and implementation"
+    ],
     "humanReview": true
   }
 }

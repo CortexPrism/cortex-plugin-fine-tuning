@@ -3,9 +3,9 @@
  * CortexPrism Model Fine-Tuning Orchestrator
  * Plugin #174 from plugin-ideas.md
  */
-import type { PluginContext, Tool, ToolResult } from 'cortex/plugins';
+import type { PluginContext, Tool, ToolCallResult } from 'cortex/plugins';
 
-function ok(n: string, o: unknown, s: number): ToolResult {
+function ok(n: string, o: unknown, s: number): ToolCallResult {
   return {
     toolName: n,
     success: true,
@@ -13,7 +13,7 @@ function ok(n: string, o: unknown, s: number): ToolResult {
     durationMs: Date.now() - s,
   };
 }
-function fail(n: string, m: string, s: number): ToolResult {
+function fail(n: string, m: string, s: number): ToolCallResult {
   return { toolName: n, success: false, output: '', error: m, durationMs: Date.now() - s };
 }
 const PROVIDERS = ['openai', 'together', 'replicate'] as const;
